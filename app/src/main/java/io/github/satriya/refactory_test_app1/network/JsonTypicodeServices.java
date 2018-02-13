@@ -8,11 +8,11 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 
-public interface PhotoService {
+public interface JsonTypicodeServices {
 
     @GET("photos")
     Call<List<Photo>> getAllPhoto();
 
-    @GET("photos/id")
-    Call<Photo> getPhoto();
+    @GET("photos/{id}")
+    Call<Photo> getPhotoById(@Path("id")int id);
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,10 +25,25 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     private List<Photo> photoList;
     private Context mContext;
 
+    private OnItemClickListener clickListener;
+
+    public interface OnItemClickListener {
+
+        void onItemClick (View itemView, int position);
+    }
+
+    public void setOnItemClickListener (OnItemClickListener clickListener){
+
+        this.clickListener = clickListener;
+    }
+
+
     public PhotoAdapter(Context mContext, List<Photo> photoList) {
         this.photoList = photoList;
         this.mContext = mContext;
     }
+
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,12 +73,28 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         ImageView ivThumbnail;
         TextView tvAlbumId, tvID, tvTitle;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(final View itemView) {
             super(itemView);
             this.ivThumbnail = itemView.findViewById(R.id.item_photo_image);
             this.tvAlbumId = itemView.findViewById(R.id.item_photo_album);
             this.tvID = itemView.findViewById(R.id.item_photo_Id);
             this.tvTitle = itemView.findViewById(R.id.item_photo_title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(clickListener != null){
+                        int position = getAdapterPosition();
+
+                        if( position != RecyclerView.NO_POSITION){
+                            clickListener.onItemClick(itemView, position);
+                        }
+                    }
+
+
+                }
+            });
         }
     }
 
